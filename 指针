@@ -1,0 +1,35 @@
+1.在函数内想改变函数外的指针（即改变其地址）需要使用指向指针的指针
+2.在函数内想改变函数外的指针的指向的值，只需在函数内改变形参指针指向的值
+如下例子：两个有序链表序列的合并
+
+List Merge( List L1, List L2)
+{
+
+    List result, tmp, tp, l1, l2;
+    result = (PtrToNode)malloc(sizeof(struct Node));
+    tmp = result;
+    l1 = L1->Next;
+    l2 = L2->Next;
+    while(l1 && l2)
+    {
+        tp = (PtrToNode)malloc(sizeof(struct Node));
+        tp->Next = NULL;
+        if(l1->Data >= l2->Data)
+        {
+            tp->Data = l2->Data;
+            l2 = l2->Next;
+        }
+        else
+        {
+            tp->Data = l1->Data;
+            l1 = l1->Next;
+        }
+        tmp->Next = tp;
+        tmp = tp;
+    }
+    tmp->Next = l1 ? l1 : l2;
+    L1->Next = NULL;//头结点内部值为空
+    L2->Next = NULL;
+    return result;
+}
+我希望实参L1为空，此时无法用到指针的指针，那么我就只需要令其有一个头结点，让头结点内部的值Next=NULL那么L1也就只有一个头结点了（Next为指针的值）
